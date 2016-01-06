@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<Collector name="TestCollector"  schedulingPattern="0 0 * * *">
+		<ObjectType name="ot1">
+			
+			<Counters>
+				<Counter name="ctr1" type="Integer"/>
+				<Counter name="ctr2" type="Long"/>
+				<Counter name="ctr3" type="String"/>
+			</Counters>
+		</ObjectType>
+		<ObjectType name="ot2">
+			<Dimensions>
+				<Dimension name="dim1" type="Integer"/>
+				<Dimension name="dim2" type="String"/>
+			</Dimensions>
+			<Counters>
+				<Counter name="ctr1" type="Integer"/>
+				<Counter name="ctr2" type="Long"/>
+				<Counter name="ctr3" type="String"/>
+			</Counters>
+		</ObjectType>
+		<Appender class="com.kpi4j.appender.SimpleXMLFileAppender" >
+			<param name="file" value="C:/D/kpi4j/IPworks"/>
+		</Appender>
+	</Collector>
+</config>

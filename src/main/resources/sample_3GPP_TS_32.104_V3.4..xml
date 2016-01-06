@@ -1,0 +1,51 @@
+<?xml version="1.0"?> 
+<?xml-stylesheet type="text/xsl" href="MeasDataCollection.xsl" ?>
+<!DOCTYPE MeasDataCollection SYSTEM "MeasDataCollection.dtd" >
+<mdc xmlns:HTML="http://www.w3.org/TR/REC-xml">
+	<mfh>
+		<ffv>1</ffv>
+		<sn>System=UTRANNetwork,RNC=123</sn>
+		<st>RNC</st>
+		<vn>Telecom corp.</vn>
+		<cbt>20000301140000</cbt>
+	</mfh>
+	<md>
+		<neid>
+			<neun>RNC Telecomville</neun>
+			<nedn>System=UTRANNetwork,RNC=123</nedn>
+		</neid>
+		<mi>
+			<mts>20000301141430</mts>
+			<gp>900</gp>
+			<mt>attTCHSeizures</mt>
+			<mt>succTCHSeizures </mt>
+			<mt>attImmediateAssignProcs</mt>
+			<mt>succImmediateAssignProcs</mt>
+			<mv>
+				<moid>Cell=997</moid>
+				<r>234</r>
+				<r>345</r>
+				<r>567</r>
+				<r>789</r>
+				<sf>FALSE</sf>
+			</mv>
+			<mv>
+				<moid>Cell=998</moid>
+				<r>890</r>
+				<r>901</r>
+				<r>123</r>
+				<r>234</r>
+				<sf>FALSE</sf>
+			</mv>
+			<mv>
+				<moid>Cell=999</moid>
+				<r>456</r>
+				<r>567</r>
+				<r>678</r>
+				<r>789</r>
+				<sf>FALSE</sf>
+			</mv>
+		</mi>
+	</md>
+	<mff>20000301141500</mff>
+</mdc>
