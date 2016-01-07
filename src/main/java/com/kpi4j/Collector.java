@@ -95,7 +95,7 @@ public class Collector {
 			for(ObjectType ot: objectTypes.values())
 				addRecord(BasicRecordFactory.createRecord(ot));
 			initRecords=false;
-			notifyAll();
+			lock.notifyAll();
 		}
 		return old.values();
 	}
@@ -154,7 +154,7 @@ public class Collector {
 			{
 				while(initRecords)
 					try {
-						wait();
+						lock.wait();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -180,7 +180,7 @@ public class Collector {
 			{
 				while(initRecords)
 					try {
-						wait();
+						lock.wait();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
