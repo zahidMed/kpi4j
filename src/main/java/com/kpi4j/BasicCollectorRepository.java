@@ -54,7 +54,10 @@ public class BasicCollectorRepository extends CollectorRepository{
 		if(initialized) return;
 		initialized=conf.configure(getClass().getClassLoader().getResourceAsStream("resources/kpi4j.xml"), this);
 		if(initialized)
+		{
 			cron4jTaskManager.start();
+			cron4jTaskManager.registerShutdownHandler();
+		}
 	}
 	
 	
