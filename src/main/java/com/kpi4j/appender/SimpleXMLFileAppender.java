@@ -100,12 +100,12 @@ public class SimpleXMLFileAppender extends Appender{
 			Date ed=null;
 			for(PerformanceRecord record: records)
 			{
-				if(sd==null)
-				{
-					sd=((OBjectTypeRecord) record).getStartTime();
-					ed=new Date();
-				}
-				parseRecord((OBjectTypeRecord) record, rootElement, doc,sd,ed);
+//				if(sd==null)
+//				{
+//					sd=((OBjectTypeRecord) record).getStartTime();
+//					ed=((OBjectTypeRecord) record).getEndTime();
+//				}
+				parseRecord((OBjectTypeRecord) record, rootElement, doc);
 				
 			}
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -138,19 +138,19 @@ public class SimpleXMLFileAppender extends Appender{
 	 * @param st: performance counters start date and time
 	 * @param ed: performance counters end date and time
 	 */
-	private void parseRecord(PerformanceRecord rec,Element parent,Document doc,Date st,Date ed){
+	private void parseRecord(PerformanceRecord rec,Element parent,Document doc){
 		if(rec instanceof OBjectTypeRecord){
 			OBjectTypeRecord record= (OBjectTypeRecord) rec;
 			Element otElement = doc.createElement("ObjectType");
 			otElement.setAttribute("name", record.getName());
 			Element sdElement = doc.createElement("StartDate");
-			sdElement.appendChild(doc.createTextNode(df.format(st)));
+			sdElement.appendChild(doc.createTextNode(df.format(record.getStartTime())));
 			otElement.appendChild(sdElement);
 			Element edElement = doc.createElement("EndDate");
-			edElement.appendChild(doc.createTextNode(df.format(ed)));
+			edElement.appendChild(doc.createTextNode(df.format(record.getEndTime())));
 			otElement.appendChild(edElement);
 			for(PerformanceRecord subRec: record.getChildren().values()){
-				parseRecord(subRec, otElement, doc,null,null);
+				parseRecord(subRec, otElement, doc);
 			}
 			parent.appendChild(otElement);
 		}
@@ -160,7 +160,7 @@ public class SimpleXMLFileAppender extends Appender{
 			dimElement.setAttribute("value", String.valueOf(record.getValue()));
 			parent.appendChild(dimElement);
 			for(PerformanceRecord subRec: record.getChildren().values()){
-				parseRecord(subRec, dimElement, doc,null,null);
+				parseRecord(subRec, dimElement, doc);
 			}
 		}
 		else if(rec instanceof LeafRecord){
