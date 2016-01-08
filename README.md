@@ -171,5 +171,21 @@ Following the configuration file above, the corresponding table should be:
 	primary key(start_date,dimension1)
 	);
 
+##Library performance
 
-For any further question, fell free to contact me at zahid.med@gmail.com
+###Test environment
+
+ * Dual core 2.6 GHz
+ * RAM: 4 Go
+ * OS: Windows 7 pro 64 bit
+ * JRE version 1.7.0_75
+
+###Result
+
+The library test was performed by creating 100 concurrent threads that increment counters with 1 dimension depth.
+
+This test shows that the average duration of incrementing a counter is **180 ns** (nanosecond).
+
+
+
+**For any further question, fell free to contact me at zahid.med@gmail.com**

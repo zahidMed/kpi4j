@@ -67,9 +67,9 @@ public class BasicCollectorRepository extends CollectorRepository{
 		Collector coll=collectors.get(name);
 		if(coll==null){
 			logger.error("Collector not found");
-			return	new Collector(name);
+			coll=	new Collector(name);
+			collectors.put(name, coll);
 		}
-		
 		return coll;
 	}
 
