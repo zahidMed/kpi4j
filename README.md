@@ -81,7 +81,8 @@ code example based on the above configuration file
     
     }
 
-Output file sample:
+###SimpleXMLFileAppender
+the output file sample bellow is generated when using the appender **com.kpi4j.appender.SimpleXMLFileAppender** :
 
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
     <Statistics>
@@ -98,5 +99,77 @@ Output file sample:
     		</dimension2>
     	</ObjectType>
     </Statistics>
-    
+
+###JDBCAppender
+
+If you want to save performance records directly in JDBC database such use Mysql, Postgresql, MariaDB, Oracle ... you can use the appender **com.kpi4j.appender.JDBCAppender** for this task.
+
+####JDBCAppender dependencies
+
+Developer should add the JDBC driver that corresponds to the database
+
+**Mysql dependency**
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+		</dependency>
+
+**MariaDB dependency**
+
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
+**Postgresql dependency**
+
+    <dependency>
+    	<groupId>postgresql</groupId>
+    	<artifactId>postgresql</artifactId>
+    	<version>VERSION</version>
+    </dependency>
+
+####JDBCAppender configuration
+
+The configuration of **Appender** tag should look like:
+
+    <Appender class="com.kpi4j.appender.JDBCAppender" >
+			<param name="host" value="localhost"/>
+			<param name="port" value="3306"/>
+			<param name="login" value="root"/>
+			<param name="password" value="root"/>
+			<param name="driver" value="com.mysql.jdbc.Driver"/>
+			<param name="type" value="mysql"/>
+			<param name="database" value="kpi4j"/>
+    </Appender>
+
+Where:
+ * host: the database host name
+ * port: the database port
+ * login: the database login
+ * password: the database password
+ * driver: the JDBC driver com.mysql.jdbc.Driver for mysql, org.mariadb.jdbc.Driver for mariaDB ...
+ * type: the database type: mysql, mariadb or postgresql ...
+ * database: the database schema name in which the performance records will be stored.
+
+####Database pre-requisites 
+
+The database should be prepared before executing the program. The object types should correspond to tables with the same names and the dimension should be declared as a primary keys. Developer should also add two datetime fields which are **start_date (primary key)** and **end_date**.
+Following the configuration file above, the corresponding table should be:
+
+
+	create table ot1 (
+	start_date datetime not null,
+	end_date datetime,
+	dimension1 varchar(45) not null,
+	applicationId int,
+	ctr1 int,
+	ctr2 bigint,
+	primary key(start_date,dimension1)
+	);
+
+
 For any further question, fell free to contact me at zahid.med@gmail.com
