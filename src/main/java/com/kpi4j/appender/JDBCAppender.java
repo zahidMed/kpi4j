@@ -22,6 +22,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -29,10 +30,15 @@ import org.apache.log4j.Logger;
 import com.kpi4j.Counter;
 import com.kpi4j.Dimension;
 import com.kpi4j.ObjectType;
+import com.kpi4j.records.BooleanCounter;
 import com.kpi4j.records.DimensionRecord;
+import com.kpi4j.records.DoubleCounter;
+import com.kpi4j.records.IntCounter;
 import com.kpi4j.records.LeafRecord;
+import com.kpi4j.records.LongCounter;
 import com.kpi4j.records.OBjectTypeRecord;
 import com.kpi4j.records.PerformanceRecord;
+import com.kpi4j.records.StringCounter;
 
 /**
  * Extends the Appender in order to save performance indicators in a JDBC based database.
@@ -154,7 +160,21 @@ public class JDBCAppender extends Appender{
 			{
 				for(PerformanceRecord subRec: record.getChildren().values()){
 					LeafRecord ctr=(LeafRecord) subRec;
-					ps.setObject(depth++, ctr.getValue());
+					if(ctr.getValue()!=null)
+						ps.setObject(depth++, ctr.getValue());
+					else
+					{
+						if(subRec instanceof StringCounter)
+							ps.setNull(depth++, Types.VARCHAR);
+						else if(subRec instanceof BooleanCounter)
+							ps.setNull(depth++, Types.BOOLEAN);
+						else if(subRec instanceof DoubleCounter)
+							ps.setNull(depth++, Types.DOUBLE);
+						else if(subRec instanceof IntCounter)
+							ps.setNull(depth++, Types.INTEGER);
+						else if(subRec instanceof LongCounter)
+							ps.setNull(depth++, Types.BIGINT);
+					}
 				}
 				ps.addBatch();
 			}
