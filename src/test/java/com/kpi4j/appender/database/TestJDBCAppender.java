@@ -1,4 +1,4 @@
-package com.kpi4j.appender;
+package com.kpi4j.appender.database;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.kpi4j.Counter;
 import com.kpi4j.Dimension;
 import com.kpi4j.ObjectType;
+import com.kpi4j.appender.database.JDBCAppender;
 import com.kpi4j.records.OBjectTypeRecord;
 
 public class TestJDBCAppender {

@@ -136,7 +136,7 @@ Developer should add the JDBC driver that corresponds to the database
 
 The configuration of **Appender** tag should look like:
 
-    <Appender class="com.kpi4j.appender.JDBCAppender" >
+    <Appender class="com.kpi4j.appender.database.JDBCAppender" >
 			<param name="host" value="localhost"/>
 			<param name="port" value="3306"/>
 			<param name="login" value="root"/>
@@ -171,21 +171,117 @@ Following the configuration file above, the corresponding table should be:
 	primary key(start_date,dimension1)
 	);
 
+###3GPP XML file appenders
+The 3GPP appenders are used to generate statistic files for telecommunication systems according to the 3GPP specifications. Each Object type is stored in separated file. The following table link the appender class to the vesrion
+
+Version|Class
+-------|-------------------
+3GPP TS 32.435 version 7.2.0 Release 7|com.kpi4j.appender.XML3GppTs32Dot435V7Dot2Appender
+
+####Appender configuration: 3GPP TS 32.435 version 7.2.0 Release 7
+
+The configuration of this 3GPP version can be done by defining the parameters vendorName, dnPrefix, localDn, elementType, swVersion and directory where the statistic files will be saved.
+
+The statistics file names corresponds to the Object type names with start time and end time.
+
+Bellow a configuration example for the object type RncFunction.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <config>
+    	<Collector name="node1"  schedulingPattern="* * * * *">
+    		<ObjectType name="RncFunction">
+    			<Dimensions>
+    				<Dimension name="RncFunction" type="String"/>
+    				<Dimension name="UtranCell" type="String"/>
+    			</Dimensions>
+    			<Counters>
+    				<Counter name="attTCHSeizures" type="Integer"/>
+    				<Counter name="succTCHSeizures" type="Integer"/>
+    				<Counter name="attImmediateAssignProcs" type="Integer"/>
+    				<Counter name="succImmediateAssignProcs" type="Integer"/>
+    				<Counter name="ethernetStatsBroadcastTx" type="Integer"/>
+    			</Counters>
+    		</ObjectType>
+    		<Appender class="com.kpi4j.appender._3gpp.XML3GppTs32Dot435V7Dot2Appender" >
+    			<param name="vendorName" value="CompanyNN"/>
+    			<param name="dnPrefix" value="DC=a1.companyNN.com,SubNetwork=1,IRPAgent=1"/>
+    			<param name="localDn" value="SubNetwork=CountryNN,MeContext=MEC-Gbg-1,ManagedElement=RNC-Gbg-1"/>
+    			<param name="elementType" value="RNC"/>
+    			<param name="userLabel" value="RNC Telecomville"/>
+    			<param name="swVersion" value="R30.1.5"/>
+    			<param name="directory" value="C:/statistics/"/>
+    		</Appender>
+    	</Collector>
+    </config>
+
+
+the output file of the configuration above looks like:
+
+	<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<?xml-stylesheet type="text/xsl" href="MeasDataCollection.xsl"?>
+	<measCollecFile xmlns="http://www.3gpp.org/ftp/specs/archive/32_series/32.435#measCollec">
+	  <fileHeader CompanyNN="CompanyNN" dnPrefix="DC=a1.companyNN.com,SubNetwork=1,IRPAgent=1" fileFormatVersion="32.435 V7.2.0">
+	    <fileSender elementType="RNC" localDn="SubNetwork=CountryNN,MeContext=MEC-Gbg-1,ManagedElement=RNC-Gbg-1"/>
+	    <measCollec beginTime="2016-01-15T16:04:00+0000"/>
+	  </fileHeader>
+	  <measData>
+	    <managedElement localDn="SubNetwork=CountryNN,MeContext=MEC-Gbg-1,ManagedElement=RNC-Gbg-1" swVersion="R30.1.5" userLabel="RNC Telecomville"/>
+	  </measData>
+	  <measInfo>
+	    <granPeriod duration="PT60S" endTime="2016-01-15T16:05:00+0000"/>
+	    <repPeriod duration="PT60S"/>
+	    <measType p="1">attTCHSeizures</measType>
+	    <measType p="2">succTCHSeizures</measType>
+	    <measType p="3">attImmediateAssignProcs</measType>
+	    <measType p="4">succImmediateAssignProcs</measType>
+	    <measType p="5">ethernetStatsBroadcastTx</measType>
+	    <measValue measObjLdn="RncFunction=RF-1,UtranCell=Gbg-2">
+	      <r p="1">2990</r>
+	      <r p="2">2988</r>
+	      <r p="3">2927</r>
+	      <r p="4">2962</r>
+	      <r p="5">3006</r>
+	    </measValue>
+	    <measValue measObjLdn="RncFunction=RF-1,UtranCell=Gbg-1">
+	      <r p="1">3008</r>
+	      <r p="2">2978</r>
+	      <r p="3">2969</r>
+	      <r p="4">2982</r>
+	      <r p="5">2969</r>
+	    </measValue>
+	    <measValue measObjLdn="RncFunction=RF-2,UtranCell=Gbg-1">
+	      <r p="1">2983</r>
+	      <r p="2">2963</r>
+	      <r p="3">3019</r>
+	      <r p="4">2892</r>
+	      <r p="5">3018</r>
+	    </measValue>
+	    <measValue measObjLdn="RncFunction=RF-2,UtranCell=Gbg-2">
+	      <r p="1">2997</r>
+	      <r p="2">2934</r>
+	      <r p="3">2860</r>
+	      <r p="4">3024</r>
+	      <r p="5">2904</r>
+	    </measValue>
+	  </measInfo>
+	</measCollecFile>
+
+
 ##Library performance
 
 ###Test environment
 
- * Dual core 2.6 GHz
+ * Dual core i5 2.60 GHz
  * RAM: 4 Go
  * OS: Windows 7 pro 64 bit
  * JRE version 1.7.0_75
 
 ###Result
 
-The library test was performed by creating 100 concurrent threads that increment counters with 1 dimension depth.
+The library test was performed by creating **100** concurrent threads that increment randomly counters with 1 dimension depth.
 
 This test shows that the average duration of incrementing a counter is **180 ns** (nanosecond).
 
 
 
-**For any further question, fell free to contact me at zahid.med@gmail.com**
+For any further question, fell free to contact me at zahid.med@gmail.com

@@ -18,7 +18,6 @@
 package com.kpi4j.appender;
 
 import java.util.Collection;
-import java.util.Map;
 
 import com.kpi4j.records.PerformanceRecord;
 

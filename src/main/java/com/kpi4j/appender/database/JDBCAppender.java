@@ -15,7 +15,7 @@
  *
  */
 
-package com.kpi4j.appender;
+package com.kpi4j.appender.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import com.kpi4j.Counter;
 import com.kpi4j.Dimension;
 import com.kpi4j.ObjectType;
+import com.kpi4j.appender.Appender;
 import com.kpi4j.records.BooleanCounter;
 import com.kpi4j.records.DimensionRecord;
 import com.kpi4j.records.DoubleCounter;
