@@ -94,6 +94,14 @@ public class BasicCollectorRepository extends CollectorRepository{
 		collectors.put(name, coll);
 		cron4jTaskManager.registerCollector(coll);
 	}
+	
+	
+	@Override
+	public void resetRepository(){
+		cron4jTaskManager.stop();
+		collectors=new HashMap<String,Collector>();
+		initialized=false;
+	}
 
 	public boolean isInitialized() {
 		return initialized;

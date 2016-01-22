@@ -128,6 +128,7 @@ public class DomComfigurator implements Configurator{
 		}
 		boolean res=false;
 		this.repository=repository;
+		repository.resetRepository();
 		try {
 	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder documentBuilder = factory.newDocumentBuilder();

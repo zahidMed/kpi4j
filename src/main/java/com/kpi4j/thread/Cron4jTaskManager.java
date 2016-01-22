@@ -55,13 +55,18 @@ public class Cron4jTaskManager {
 		scheduler.start();
 	}
 	
+	public void stop(){
+		if(scheduler.isStarted())
+			scheduler.stop();
+	}
 	public void registerShutdownHandler(){
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			@Override
 			public void run(){
 				logger.debug("Stop scheduler and save statistics");
-				scheduler.stop();
+				if(scheduler.isStarted())
+					scheduler.stop();
 				for(CollectorCron coll:list){
 					coll.run();
 					coll.finalize();

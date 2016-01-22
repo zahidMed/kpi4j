@@ -53,4 +53,6 @@ public abstract class CollectorRepository {
 	public abstract void addCollector(Collector coll,String name);
 	public abstract void setInitialized(boolean initialized);
 
+	public abstract void resetRepository();
+
 }
