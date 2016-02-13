@@ -41,17 +41,17 @@ import com.kpi4j.records.PerformanceRecord;
  */
 public class Collector {
 
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	static CollectorRepository collectorRepository;
 	
-	Map<String,ObjectType> objectTypes;
+	Map<String,ObjectType> objectTypes= new LinkedHashMap<String, ObjectType>();
 	
 	List<Appender> appenders;
 	
 	String schedulingPattern;
 	
-	Map<String,PerformanceRecord> records;// = new LinkedHashMap<String, PerformanceRecord>();
+	Map<String,PerformanceRecord> records;
 	
 	boolean initRecords=false;
 	
@@ -74,6 +74,9 @@ public class Collector {
 	public void init()
 	{
 		logger.debug("init record objects");
+		for(Appender appender:appenders){
+			appender.initialize(objectTypes.values());
+		}
 		for(ObjectType ot: objectTypes.values())
 			addRecord(BasicRecordFactory.createRecord(ot));
 
@@ -109,7 +112,8 @@ public class Collector {
 	 * @param pr
 	 */
     void addRecord(OBjectTypeRecord pr){
-    	if(records==null) records = new LinkedHashMap<String, PerformanceRecord>();
+    	if(records==null) 
+    		records = new LinkedHashMap<String, PerformanceRecord>();
     	records.put(pr.getName(), pr);
     }
 	
@@ -120,7 +124,8 @@ public class Collector {
      * @see {@link CollectorRepository#getCollector(String)}
      */
 	public static synchronized Collector getCollector(String name){
-		if(collectorRepository==null) collectorRepository=BasicCollectorRepository.getCollectorRepository();
+		if(collectorRepository==null) 
+			collectorRepository=BasicCollectorRepository.getCollectorRepository();
 		return collectorRepository.getCollector(name);
 	}
 	
@@ -130,7 +135,8 @@ public class Collector {
 	 * @param ot
 	 */
 	public void addObjectType(ObjectType ot){
-		if(objectTypes==null) objectTypes= new LinkedHashMap<String, ObjectType>();
+		if(objectTypes==null) 
+			objectTypes= new LinkedHashMap<String, ObjectType>();
 		objectTypes.put(ot.getName(),ot);
 	}
 	
@@ -140,7 +146,8 @@ public class Collector {
 	 * @param ot
 	 */
 	public void addAppender(Appender ot){
-		if(appenders==null) appenders= new ArrayList<Appender>();
+		if(appenders==null) 
+			appenders= new ArrayList<Appender>();
 		appenders.add(ot);
 	}
 	
@@ -151,7 +158,8 @@ public class Collector {
 	 * incrementCounter("ObjectType",OT_NAME,"Dim1",DIMENSION_NAME,...,"COUNTER_NAME",COUNTER_VALUE);
 	 */
 	public void incrementCounter(Object... input){
-		if(records==null) records = new LinkedHashMap<String, PerformanceRecord>();
+		if(records==null) 
+			records = new LinkedHashMap<String, PerformanceRecord>();
 		if(checkInput(input))
 		{
 			synchronized(lock)
@@ -160,8 +168,7 @@ public class Collector {
 					try {
 						lock.wait();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error("Lock exception",e);
 					}
 			}
 			OBjectTypeRecord otRecord=(OBjectTypeRecord)records.get(input[1]);
@@ -178,7 +185,8 @@ public class Collector {
 	 * incrementCounter("ObjectType",OT_NAME,"Dim1",DIMENSION_NAME,...,"COUNTER_NAME",COUNTER_VALUE);
 	 */
 	public void setCounterValue(Object... input){
-		if(records==null) records = new LinkedHashMap<String, PerformanceRecord>();
+		if(records==null) 
+			records = new LinkedHashMap<String, PerformanceRecord>();
 		if(checkInput(input)){
 			synchronized(lock)
 			{
@@ -186,8 +194,7 @@ public class Collector {
 					try {
 						lock.wait();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error("Lock exception",e);
 					}
 			}
 			OBjectTypeRecord otRecord=(OBjectTypeRecord) records.get(input[1]);
@@ -205,10 +212,13 @@ public class Collector {
 	 * @return
 	 */
 	boolean checkInput(Object... input){
-		if(input==null || input.length%2==1) return false;
+		if(input==null || input.length%2==1) 
+			return false;
 		ObjectType ot=objectTypes.get(input[1]);
-		if(ot==null) return false;
-		if(ot.getDepth()*2!=input.length) return false;
+		if(ot==null) 
+			return false;
+		if(ot.getDepth()*2!=input.length) 
+			return false;
 		return ot.checkInput(input);
 	}
 

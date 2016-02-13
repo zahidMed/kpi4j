@@ -23,7 +23,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 import com.kpi4j.config.Configurator;
-import com.kpi4j.config.xml.DomComfigurator;
+import com.kpi4j.config.xml.DomConfigurator;
 import com.kpi4j.thread.Cron4jTaskManager;
 
 /**
@@ -34,10 +34,10 @@ import com.kpi4j.thread.Cron4jTaskManager;
 public class BasicCollectorRepository extends CollectorRepository{
 
 	private static BasicCollectorRepository repo=null;
-	Configurator conf= new DomComfigurator();
+	Configurator conf= new DomConfigurator();
 	Cron4jTaskManager cron4jTaskManager=Cron4jTaskManager.getInstance();
 	
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	/**
 	 * Private constructor to implements Singleton design pattern. 
@@ -51,7 +51,8 @@ public class BasicCollectorRepository extends CollectorRepository{
 	 */
 	synchronized void initialize()
 	{
-		if(initialized) return;
+		if(initialized) 
+			return;
 		initialized=conf.configure(getClass().getClassLoader().getResourceAsStream("resources/kpi4j.xml"), this);
 		if(initialized)
 		{
@@ -64,8 +65,6 @@ public class BasicCollectorRepository extends CollectorRepository{
 	
 	@Override
 	public Collector getCollector(String name) {
-		// TODO Auto-generated method stub
-		
 		initialize();
 		Collector coll=collectors.get(name);
 		if(coll==null){
@@ -80,8 +79,8 @@ public class BasicCollectorRepository extends CollectorRepository{
 
 
 	public static CollectorRepository getCollectorRepository() {
-		// TODO Auto-generated method stub
-		if(repo==null) repo= new  BasicCollectorRepository();
+		if(repo==null) 
+			repo= new  BasicCollectorRepository();
 		return repo;
 	}
 
@@ -90,7 +89,6 @@ public class BasicCollectorRepository extends CollectorRepository{
 
 	@Override
 	public void addCollector(Collector coll, String name) {
-		// TODO Auto-generated method stub
 		collectors.put(name, coll);
 		cron4jTaskManager.registerCollector(coll);
 	}

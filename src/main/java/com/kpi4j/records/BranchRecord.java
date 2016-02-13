@@ -30,7 +30,7 @@ import com.kpi4j.Counter;
 
 public abstract class BranchRecord extends PerformanceRecord{
 
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	Map<Object,PerformanceRecord> children= Collections.synchronizedMap(new LinkedHashMap<Object, PerformanceRecord>());
 	
@@ -38,7 +38,6 @@ public abstract class BranchRecord extends PerformanceRecord{
 	
 	@Override
 	public void incrementCounter(Object...input) {
-		// TODO Auto-generated method stub
 
 		if(input.length==2)
 		{
@@ -83,7 +82,6 @@ public abstract class BranchRecord extends PerformanceRecord{
 	
 	@Override
 	public void setCounterValue(Object...input) {
-		// TODO Auto-generated method stub
 			if(input.length==2)
 			{
 				PerformanceRecord record=children.get(input[0]);

@@ -23,23 +23,23 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.kpi4j.Collector;
-import com.kpi4j.config.xml.DomComfigurator;
 
 import it.sauronsoftware.cron4j.Scheduler;
 
 public class Cron4jTaskManager {
 
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	private static Cron4jTaskManager instance=null;
 	List<CollectorCron> list;
 	Scheduler scheduler;
 	private Cron4jTaskManager(){
 		scheduler = new Scheduler();
-		list= new ArrayList<CollectorCron>();
+		list= new ArrayList();
 	}
 	
 	public static Cron4jTaskManager getInstance(){
-		if(instance==null) instance= new Cron4jTaskManager();
+		if(instance==null) 
+			instance= new Cron4jTaskManager();
 		return instance;
 	}
 	

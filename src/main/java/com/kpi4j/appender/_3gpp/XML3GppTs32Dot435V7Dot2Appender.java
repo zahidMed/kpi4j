@@ -16,11 +16,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.kpi4j.Counter;
+import com.kpi4j.ObjectType;
 import com.kpi4j.appender.Appender;
 import com.kpi4j.records.DimensionRecord;
 import com.kpi4j.records.LeafRecord;
@@ -36,6 +38,8 @@ import com.kpi4j.records.PerformanceRecord;
  */
 public class XML3GppTs32Dot435V7Dot2Appender extends Appender {
 
+	private static final Logger logger=Logger.getLogger("kpi4j");
+	
 	String fileFormatVersion = "32.435 V7.2.0";
 
 	String vendorName;
@@ -56,14 +60,12 @@ public class XML3GppTs32Dot435V7Dot2Appender extends Appender {
 	DateFormat fdf = new SimpleDateFormat("yyyyMMddHHmm");
 
 	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+	public void initialize(Collection<ObjectType> objectTypes) {
 
 	}
 
 	@Override
 	public void finalize() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -145,14 +147,11 @@ public class XML3GppTs32Dot435V7Dot2Appender extends Appender {
 				StreamResult result = new StreamResult(new File(fileName));
 				transformer.transform(source, result);
 			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error while saving statistics", e);
 			} catch (TransformerConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error while saving statistics", e);
 			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error while saving statistics", e);
 			}
 		}
 
@@ -185,14 +184,14 @@ public class XML3GppTs32Dot435V7Dot2Appender extends Appender {
 			Element measValue=null;
 			boolean isLastDim=false;
 			for (PerformanceRecord subRec : record.getChildren().values()) {
-				isLastDim=(subRec instanceof LeafRecord);
+				isLastDim=subRec instanceof LeafRecord;
 				if(isLastDim && measValue==null)
 				{ 
 					measValue = doc.createElement("measValue");
 					measValue.setAttribute("measObjLdn", moid);
 					parent.appendChild(measValue);
 				}
-				parseRecord(subRec,(isLastDim)?measValue:parent, doc, moid, i++);
+				parseRecord(subRec,isLastDim?measValue:parent, doc, moid, i++);
 			}
 		} else if (rec instanceof LeafRecord) {
 			Element valElement = doc.createElement("r");

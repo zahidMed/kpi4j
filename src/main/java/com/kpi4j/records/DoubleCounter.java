@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class DoubleCounter extends NumericCounter{
 
 	double value=0.0;
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	public DoubleCounter(String name){
 		this.name=name;
@@ -38,7 +38,6 @@ public class DoubleCounter extends NumericCounter{
 	}
 	
 	public Object getValue() {
-		// TODO Auto-generated method stub
 		return value;
 	}
 
@@ -48,13 +47,11 @@ public class DoubleCounter extends NumericCounter{
 	}
 	@Override
 	public synchronized void incrementCounter(Object... input) {
-		// TODO Auto-generated method stub
 		this.value+=(Double) input[0];
 	}
 
 	@Override
 	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
 		this.value=(Double) obj;
 	}
 

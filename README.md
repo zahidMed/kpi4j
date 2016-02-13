@@ -144,6 +144,7 @@ The configuration of **Appender** tag should look like:
 			<param name="driver" value="com.mysql.jdbc.Driver"/>
 			<param name="type" value="mysql"/>
 			<param name="database" value="kpi4j"/>
+			<param name="createTable" value="true"/>
     </Appender>
 
 Where:
@@ -154,8 +155,9 @@ Where:
  * driver: the JDBC driver com.mysql.jdbc.Driver for mysql, org.mariadb.jdbc.Driver for mariaDB ...
  * type: the database type: mysql, mariadb or postgresql ...
  * database: the database schema name in which the performance records will be stored.
+ * createTable: indicate if the library should create the tables related to the Object types in the database if not exist (default value is false)
 
-####Database pre-requisites 
+####Database pre-requisites (If the tag createTable is not used )
 
 The database should be prepared before executing the program. The object types should correspond to tables with the same names and the dimension should be declared as a primary keys. Developer should also add two datetime fields which are **start_date (primary key)** and **end_date**.
 Following the configuration file above, the corresponding table should be:

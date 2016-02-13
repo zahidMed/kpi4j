@@ -19,7 +19,6 @@ package com.kpi4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,8 @@ public class ObjectType
 	 * @param c
 	 */
 	public void addCounter(Counter c){
-		if(map==null)map= new LinkedHashMap<String, Counter>();
+		if(map==null)
+			map= new LinkedHashMap<String, Counter>();
 		map.put(c.getName(), c);
 	}
 	
@@ -71,7 +71,8 @@ public class ObjectType
 	 * @param d
 	 */
 	public void addDimension(Dimension d){
-		if(dimensions==null) dimensions= new ArrayList<Dimension>();
+		if(dimensions==null) 
+			dimensions= new ArrayList<Dimension>();
 		dimensions.add(d);
 	}
 
@@ -106,23 +107,24 @@ public class ObjectType
 		if(dimensions==null)
 		{
 			Counter counter=map.get(input[2]);
-			if(counter==null) return false;
+			if(counter==null) 
+				return false;
 			return counter.getType().isInstance(input[3]);
 		}
 		else
 		{
 			for(int i=1;i<input.length/2-1;i++){
 				Dimension dim=dimensions.get(i-1);
-				if(!dim.getName().equals(input[i*2])) return false;
-				if(!dim.getType().isInstance(input[i*2+1])) return false;
+				if(!dim.getName().equals(input[i*2])) 
+					return false;
+				if(!dim.getType().isInstance(input[i*2+1])) 
+					return false;
 			}
 			Counter counter=map.get(input[input.length-2]);
-			if(counter==null) return false;
+			if(counter==null) 
+				return false;
 			return counter.getType().isInstance(input[input.length-1]);
 		}
 	}
 
-//	public void setCounters(List<Counter> counters) {
-//		this.counters = counters;
-//	}
 }

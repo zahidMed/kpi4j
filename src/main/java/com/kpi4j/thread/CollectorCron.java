@@ -18,7 +18,6 @@
 package com.kpi4j.thread;
 
 import java.util.Collection;
-import java.util.Map;
 
 import com.kpi4j.Collector;
 import com.kpi4j.appender.Appender;
@@ -39,7 +38,6 @@ public class CollectorCron implements Runnable {
 		this.collector = collector;
 	}
 	public void run() {
-		// TODO Auto-generated method stub
 		if(collector==null)
 		{
 			return;

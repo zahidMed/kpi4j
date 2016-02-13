@@ -32,11 +32,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.kpi4j.Counter;
+import com.kpi4j.ObjectType;
 import com.kpi4j.appender.Appender;
 import com.kpi4j.records.DimensionRecord;
 import com.kpi4j.records.LeafRecord;
@@ -50,6 +52,8 @@ import com.kpi4j.records.PerformanceRecord;
  */
 public class XML3gppTs32Dot104V3Dot4Appender extends Appender {
 
+	private static final Logger logger=Logger.getLogger("kpi4j");
+	
 	DateFormat fdf = new SimpleDateFormat("yyyyMMddHHmm");
 	/**
 	 * The sender name
@@ -82,15 +86,12 @@ public class XML3gppTs32Dot104V3Dot4Appender extends Appender {
 	String nedn="";
 
 	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+	public void initialize(Collection<ObjectType> objectTypes) {
 		
 	}
 
 	@Override
 	public void finalize() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**
@@ -141,20 +142,12 @@ public class XML3gppTs32Dot104V3Dot4Appender extends Appender {
 					gp.appendChild(doc.createTextNode(String.valueOf(duration)));
 					mi.appendChild(gp);
 					
-					int i = 1;
 					for (Counter counter : otRec.getObjectType().getCounters()) {
 						Element measType = doc.createElement("mt");
 						measType.appendChild(doc.createTextNode(counter.getName()));
 						mi.appendChild(measType);
 					}
 					parseRecord(otRec, mi, doc, null);
-
-//						if(sd==null)
-//						{
-//							sd=((OBjectTypeRecord) record).getStartTime();
-//							ed=((OBjectTypeRecord) record).getEndTime();
-//						}
-						//parseRecord((OBjectTypeRecord) record, mdcElement, doc);
 						
 					TransformerFactory transformerFactory = TransformerFactory.newInstance();
 					Transformer transformer = transformerFactory.newTransformer();
@@ -165,14 +158,11 @@ public class XML3gppTs32Dot104V3Dot4Appender extends Appender {
 					StreamResult result = new StreamResult(new File(fileName));
 					transformer.transform(source, result);
 				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("Error while saving statistics", e);
 				} catch (TransformerConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("Error while saving statistics", e);
 				} catch (TransformerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("Error while saving statistics", e);
 				}
 		}
 	}
@@ -195,14 +185,14 @@ public class XML3gppTs32Dot104V3Dot4Appender extends Appender {
 			Element measValue=null;
 			boolean isLastDim=false;
 			for (PerformanceRecord subRec : record.getChildren().values()) {
-				isLastDim=(subRec instanceof LeafRecord);
+				isLastDim=subRec instanceof LeafRecord;
 				if(isLastDim && measValue==null)
 				{ 
 					measValue = doc.createElement("measValue");
 					measValue.setAttribute("measObjLdn", moid);
 					parent.appendChild(measValue);
 				}
-				parseRecord(subRec,(isLastDim)?measValue:parent, doc, moid);
+				parseRecord(subRec,isLastDim?measValue:parent, doc, moid);
 			}
 		} else if (rec instanceof LeafRecord) {
 			Element valElement = doc.createElement("r");

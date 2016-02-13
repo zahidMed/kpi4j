@@ -42,9 +42,9 @@ import com.kpi4j.appender.Appender;
 import com.kpi4j.config.Configurator;
 import com.kpi4j.records.BasicRecordFactory;
 
-public class DomComfigurator implements Configurator{
+public class DomConfigurator implements Configurator{
 
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	static final String CONFIG_TAG="config";
 	static final String COLLECTOR_TAG="Collector";
@@ -69,23 +69,20 @@ public class DomComfigurator implements Configurator{
 	
 	
 	public boolean configure(URI uri, CollectorRepository repository) {
-		// TODO Auto-generated method stub
 		InputStream in=null;
 		boolean res=false;
 		try {
 			in=new FileInputStream(uri.toString());
 			res=configure(in, repository);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			logger.error("",e1);
+		} catch (FileNotFoundException e) {
+			logger.error("",e);
 		}
 		finally {
 			if(in!=null)
 				try {
 					in.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("",e);
 				}
 		}
 		return res;
@@ -93,23 +90,20 @@ public class DomComfigurator implements Configurator{
 	}
 	
 	public boolean configure(String uri, CollectorRepository repository) {
-		// TODO Auto-generated method stub
 		boolean res=false;
 		InputStream in=null;
 		try {
 			in=new FileInputStream(uri);
 			res=configure(in, repository);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (FileNotFoundException e) {
+			logger.error("",e);
 		}
 		finally {
 			if(in!=null)
 				try {
 					in.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error("",e);
 				}
 		}
 		return res;
@@ -119,7 +113,6 @@ public class DomComfigurator implements Configurator{
 	
 	public boolean configure(InputStream in, CollectorRepository repository) {
 		logger.debug("configure kpi4j");
-		// TODO Auto-generated method stub
 		if(in==null) 
 		{
 			System.err.println("kpi4j: WARN No config file found: InputStream is null");
@@ -137,7 +130,6 @@ public class DomComfigurator implements Configurator{
 	        res=true;
 	        logger.debug("kpi4j configured");
 	    } catch (Exception e) {
-	    	e.printStackTrace();
 	        logger.error("",e);
 	    }
 
@@ -168,7 +160,6 @@ public class DomComfigurator implements Configurator{
 			{
 				ObjectType ot=parseObjectType((Element)ots.item(i));
 				coll.addObjectType(ot);
-				//coll.addRecord(BasicRecordFactory.createRecord(ot), ot.getName());
 			}
 		}
 		NodeList appenders=collector.getElementsByTagName(APPENDER_TAG);
@@ -253,11 +244,10 @@ public class DomComfigurator implements Configurator{
 					Method method=appendre.getClass().getMethod(getAttributeSetter(param.getAttribute(NAME_ATTR)),String.class);
 					method.invoke(appendre,param.getAttribute(VALUE_ATTR));
 				}
-			appendre.initialize();
+			//appendre.initialize();
 			return appendre;
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			logger.error("",e);
 		} 
 		return null;
@@ -266,7 +256,7 @@ public class DomComfigurator implements Configurator{
 	public String getAttributeSetter(String name){
 		if(name==null || name.length()==0)
 			throw new IllegalArgumentException("Invalid attribute name");
-		StringBuffer buff= new StringBuffer("set");
+		StringBuilder buff= new StringBuilder("set");
 		for(int i=0;i<name.length();i++)
 		{
 			if(i==0)

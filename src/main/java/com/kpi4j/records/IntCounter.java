@@ -40,7 +40,6 @@ public class IntCounter extends NumericCounter{
 	}
 	
 	public Object getValue() {
-		// TODO Auto-generated method stub
 		return value;
 	}
 
@@ -51,13 +50,11 @@ public class IntCounter extends NumericCounter{
 	}
 	@Override
 	public synchronized void incrementCounter(Object... input) {
-		// TODO Auto-generated method stub
 		this.value+=(Integer) input[0];
 	}
 
 	@Override
 	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
 		this.value=(Integer) obj;
 	}
 

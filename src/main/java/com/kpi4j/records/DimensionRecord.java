@@ -26,7 +26,7 @@ import com.kpi4j.Collector;
 public class DimensionRecord extends BranchRecord{
 
 	Object value;
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	
 	public DimensionRecord(String name,Class type,Object value){

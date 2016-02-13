@@ -19,6 +19,7 @@ package com.kpi4j.appender;
 
 import java.util.Collection;
 
+import com.kpi4j.ObjectType;
 import com.kpi4j.records.PerformanceRecord;
 
 
@@ -34,16 +35,16 @@ abstract public class Appender {
 	 * Called after the initialization of kpi4j, this method can be used to initialize the appender
 	 * example: open a file or open database connection ....
 	 */
-	abstract public void initialize();
+	public abstract void initialize(Collection<ObjectType> objectTypes);
 	
 	/**
 	 * Called before the application shutdown 
 	 */
-	abstract public void finalize();
+	public abstract void finalize();
 	
 	/**
 	 * Save performance indicators according to the destination format
 	 * @param records
 	 */
-	abstract public void save(Collection<PerformanceRecord> records);
+	public abstract void save(Collection<PerformanceRecord> records);
 }

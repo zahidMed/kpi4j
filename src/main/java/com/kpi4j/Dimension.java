@@ -45,8 +45,9 @@ public class Dimension {
 	
 	public void addValue(Object val)
 	{
-		if(values==null) values= new ArrayList();
-			values.add(val);
+		if(values==null) 
+			values= new ArrayList();
+		values.add(val);
 	}
 	
 	public void setType(String type) throws ClassNotFoundException {

@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class BooleanCounter extends LeafRecord{
 
 	boolean value=false;
-	public static Logger logger=Logger.getLogger("kpi4j");
+	private static final Logger logger=Logger.getLogger("kpi4j");
 	
 	public BooleanCounter(String name){
 		this.name=name;
@@ -38,7 +38,6 @@ public class BooleanCounter extends LeafRecord{
 	}
 	
 	public Object getValue() {
-		// TODO Auto-generated method stub
 		return value;
 	}
 	
@@ -50,13 +49,11 @@ public class BooleanCounter extends LeafRecord{
 
 	@Override
 	public void incrementCounter(Object... input) {
-		// TODO Auto-generated method stub
-		
+		logger.info("Boolean counter cannot be incremented");
 	}
 
 	@Override
 	public void setValue(Object obj) {
-		// TODO Auto-generated method stub
 		this.value=(Boolean) obj;
 	}
 

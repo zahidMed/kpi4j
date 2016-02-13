@@ -18,7 +18,7 @@
 package com.kpi4j;
 
 import com.kpi4j.config.Configurator;
-import com.kpi4j.config.xml.DomComfigurator;
+import com.kpi4j.config.xml.DomConfigurator;
 
 /**
  *  Allows the configuration of kpi4j from an external file.
@@ -37,7 +37,7 @@ public class PropertyConfigurator {
 	 * private constructor
 	 */
 	private PropertyConfigurator(){
-		configurator= new DomComfigurator();
+		configurator= new DomConfigurator();
 		repo=BasicCollectorRepository.getCollectorRepository();
 	}
 	

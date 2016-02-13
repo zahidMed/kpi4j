@@ -22,8 +22,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,9 +34,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.kpi4j.ObjectType;
 import com.kpi4j.records.DimensionRecord;
 import com.kpi4j.records.LeafRecord;
 import com.kpi4j.records.OBjectTypeRecord;
@@ -60,6 +60,9 @@ import com.kpi4j.records.PerformanceRecord;
  */
 public class SimpleXMLFileAppender extends Appender{
 
+	
+	private static final Logger logger=Logger.getLogger("kpi4j");
+	
 	/**
 	 * file name
 	 */
@@ -71,14 +74,12 @@ public class SimpleXMLFileAppender extends Appender{
 	DateFormat df= new SimpleDateFormat("yyyyMMddHHmm");
 
 	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+	public void initialize(Collection<ObjectType> objectTypes) {
 		
 	}
 
 	@Override
 	public void finalize() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -87,7 +88,6 @@ public class SimpleXMLFileAppender extends Appender{
 	 */
 	@Override
 	public void save(Collection<PerformanceRecord> records) {
-		// TODO Auto-generated method stub
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
 		try {
@@ -100,13 +100,7 @@ public class SimpleXMLFileAppender extends Appender{
 			Date ed=null;
 			for(PerformanceRecord record: records)
 			{
-//				if(sd==null)
-//				{
-//					sd=((OBjectTypeRecord) record).getStartTime();
-//					ed=((OBjectTypeRecord) record).getEndTime();
-//				}
-				parseRecord((OBjectTypeRecord) record, rootElement, doc);
-				
+				parseRecord((OBjectTypeRecord) record, rootElement, doc);	
 			}
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -117,14 +111,11 @@ public class SimpleXMLFileAppender extends Appender{
 			StreamResult result = new StreamResult(new File(fileName));
 			transformer.transform(source, result);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while saving statistics", e);
 		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while saving statistics", e);
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while saving statistics", e);
 		}
 
 		

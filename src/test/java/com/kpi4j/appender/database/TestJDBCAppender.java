@@ -163,4 +163,47 @@ public class TestJDBCAppender {
 		appender.executeBatchInsert(ps, rec, 0);
 		ps.executeBatch();
 	}
+	
+	@Test
+	public void testGetTableCreationQuery() throws ClassNotFoundException{
+		JDBCAppender appender= new JDBCAppender();
+		ObjectType ot= new ObjectType();
+		ot.setName("ot1");
+		
+		Dimension dim1= new Dimension();
+		dim1.setName("dim1");
+		dim1.setType(Integer.class);
+		ot.addDimension(dim1);
+		
+		Dimension dim2= new Dimension();
+		dim2.setName("dim2");
+		dim2.setType(String.class);
+		ot.addDimension(dim2);
+		
+		Counter c1= new Counter();
+		c1.setName("ctr1");
+		c1.setType("Integer");
+		ot.addCounter(c1);
+		
+		Counter c2= new Counter();
+		c2.setName("ctr2");
+		c2.setType("Long");
+		ot.addCounter(c2);
+		
+		Counter c3= new Counter();
+		c3.setName("ctr3");
+		c3.setType("String");
+		ot.addCounter(c3);
+		String query="create table if not exists ot1 (\n"
+				+ "start_date datetime NOT NULL,\n"
+				+ "end_date datetime,\n"
+				+ "dim1 INTEGER NOT NULL,\n"
+				+ "dim2 VARCHAR(255) NOT NULL,\n"
+				+ "ctr1 INTEGER,\n"
+				+ "ctr2 BIGINT,\n"
+				+ "ctr3 VARCHAR(255),\n"
+				+ "primary key(start_date, dim1, dim2)\n"
+				+ ")";
+		assertEquals(query,appender.getTableCreationQuery(ot));
+	}
 }
